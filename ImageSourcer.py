@@ -5,12 +5,13 @@ import os
 class ImageSourcer:
 
     # Constructor initialising attributes
-    def __init__(self, rover, sol, index):
+    def __init__(self, rover, sol, camera, index):
         apiKey = "lORFMg7rox7XMLBWzM1byE9fd5WAe3Cf9KkoQYmp"
         self.rover = rover
         self.sol = sol
+        self.camera = camera
         self.responseString = ("https://api.nasa.gov/mars-photos/api/v1/rovers/" + self.rover + "/photos?sol="
-                              + self.sol + "&api_key=" + apiKey)
+                              + self.sol + "&camera=" + self.camera + "&api_key=" + apiKey)
         self.index = index
 
     def __call__(self):

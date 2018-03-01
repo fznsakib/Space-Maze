@@ -20,11 +20,11 @@
     var selectBox = document.getElementById("selectBox");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
     if (selectedValue === "Curiosity") {
-        document.getElementById("genImg").src = "https://www.nasa.gov/sites/default/files/thumbnails/image/pia19067_gupta-1-traverse_waypoints_sol0817.jpg";
+        document.getElementById("genImg").src = "../static/curiosityMap.jpg";
     } else if (selectedValue === "Opportunity") {
-        document.getElementById("genImg").src = "https://mars.nasa.gov/mer/mission/tm-opportunity/images/MERB_Sol1228_2.jpg";
+        document.getElementById("genImg").src = "../static/opportunityMap.jpg";
     } else if (selectedValue === "Spirit") {
-        document.getElementById("genImg").src = "https://mars.nasa.gov/mer/mission/tm-spirit/images/MERA_A1424_1.jpg";
+        document.getElementById("genImg").src = "../static/spiritMap3.png";
     } else {
       document.getElementById("genImg").src = "http://placehold.it/800x600";
     }
@@ -32,7 +32,7 @@
   </script>
 </head>
 <body>
-  <section class="hero is-fullheight is-default is-bold">
+  <!--<section class="hero is-fullheight is-default is-bold">
   <div class="hero-head">
     <nav class="navbar">
       <div class="container">
@@ -89,7 +89,7 @@
 
              <div class="tile is-child">
             <figure style="transform: scale(1.1);"  class="image is-4by3">
-              <img id="genImg" src="https://www.nasa.gov/sites/default/files/thumbnails/image/pia19067_gupta-1-traverse_waypoints_sol0817.jpg" alt="Description">
+              <img id="genImg" src="../static/curiosityMap.jpg" alt="Description">
             </figure>
              </div>
           </div>
@@ -112,6 +112,7 @@
       </div>
     </div>
 
+-->
     <!--<div class="hero-foot">
       <div class="container">
         <div class="tabs is-centered">
@@ -123,19 +124,44 @@
     </div>-->
 
 
-<!--<body>
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container">
-        <figure>
-          <img src="../static/SpaceMaze.png">
-        </figure>
-        <h2 class="subtitle has-text-white has-text-centered">
-          Come take a journey as you explore Mars as NASA's very own Curiosity rover!
-        </h2>
+<body>
+  <br></br>
+  <div class="columns">
+    <div class="column is-half is-offset-one-quarter">
+      <figure>
+        <img src="../static/SpaceMazeV2.png">
+      </figure>
+      <h2 class="subtitle has-text-white has-text-centered">
+        Come take a journey as you explore Mars as NASA's Curiosity rover!
+      </h2>
+      <div class="container is-fluid">
+        <img id="genImg" src="../static/curiosityMap.jpg" height="100" alt="Description">
       </div>
+      <div class="container is-fluid">
+        <div class="control">
+          <div class="select is-primary is-pulled-right">
+            <div class="select is-medium">
+                <select style="margin-left: 15px" onchange="changeFunc()" id="selectBox">
+                  <option value="Curiosity">Curiosity</option>
+                  <option value="Spirit">Spirit</option>
+                  <option value="Opportunity">Opportunity</option>
+                </select>
+            </div>
+              <a class="button is-medium is-info is-outlined is-pulled-left" href="/redirect">
+                Start Now!
+              </a>
+          </div>
+        </div>
+      </div>
+        <br> </br>
+        <br> </br>
+        <span class="tag is-dark is-pulled-right">By Team Curiosity - Daniel & Faizaan</span>
+        <br> </br>
+        <br> </br>
+        <br> </br>
+        <br> </br>
     </div>
-  </section>
+  </div>
   <script async type="text/javascript" src="../js/bulma.js"></script>
 </body>
-</html>-->
+</html>

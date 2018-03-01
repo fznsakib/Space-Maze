@@ -15,24 +15,24 @@
     </style>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script> window.onload=function() {
-      if ({{msgEnable}} === false){
+      if ({{msgEnable}} == true){
         window.alert("Wrong answer, please try again!");
       }
     };
-    </script>
+  </script>
   </head>
   <body class="has-text-white" background="../static/backgroundDarker.png">
     <br></br>
     <nav class="level">
       <p class="level-item has-text-centered">
-        <img src="../static/SpaceMaze.png" alt="" style="height: 80px;">
+        <img src="../static/SpaceMazeV2.png" alt="" style="height: 80px;">
       </p>
     </nav>
 
   <div class="columns">
     <div class="column spaced">
       <h1 class="has-text-centered has-text-white title">Map</h1>
-      <img src="https://www.nasa.gov/sites/default/files/thumbnails/image/pia19067_gupta-1-traverse_waypoints_sol0817.jpg"/>
+      <img src="../static/curiosityMap.jpg" border="3"/>
     </div>
     <div class="column spaced">
       <h1 class="title has-text-centered has-text-white">
@@ -58,7 +58,7 @@
   </div>
 </section>
   <form action="/submit" method="POST">
-      <div class="columns has-text-centered padded">
+      <div class="columns has-text-centered padded is-marginless">
         <div class="column is-dark">
           <label class="radio">
             <p>{{optA}}</p>
@@ -85,7 +85,7 @@
         </div>
       </div>
       <div class="has-text-centered">
-        <input type="submit" class="button is-medium is-danger is-outlined" value="submit" name="anotherinput"/>
+        <input type="submit" class="button is-medium is-warning is-outlined" value="submit" name="anotherinput"/>
       </div>
     </form>
   </body>

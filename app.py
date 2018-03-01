@@ -29,8 +29,33 @@ class Quiz:
     optionsD = ["Moon", "99.8%", "2000 billion (a lot)", "70 trillion years ago", "1 and a half hours", "Uranus",
                 "107ºC", "Venus", "20000mph", "Mars"]
 
-    locationDesc = ["Yellowknife Bay", "Darwin", "Cooperstown", "Kimberley", "Pahrump Hills", "Yellowknife Bay",
-                    "Darwin", "Cooperstown", "Kimberley", "Pahrump Hills"]
+    locationDesc = ["Yellowknife Bay", "Darwin", "Cooperstown", "Kimberley", "Bridger Basin", "Gobabeb",
+                    "Naukleft Plateau", "Murray Buttes", "Ogunquit Beach", "Vera Rubin Ridge"]
+
+    facts = ["One year on Earth is the same as 12 years on Jupiter!",
+             "The Sun is about 330,000 times the mass of our planet, Earth!",
+             "Looking at a far away star is the same as looking back through time, because it takes so long for the light to travel to us!",
+             "The Sun has about 5 billion more years of fuel left in it before it dies",
+             "Currently, the Sun is a yellow dwarf star",
+             "Jupiter has a whopping 63 moons orbiting it! Wowza!",
+             "At night, the Moon can be as cold as -180ºC",
+             "Saturn is less dense than water, meaning it would float if it were in a bathtub large enough to hold it!",
+             "One rocket uses up enough fuel to power 86,000 houses for a day!",
+             "Pluto, once thought to be the furthest planet in our solar system, is no longer thought to be a planet because it is simply too small!"]
+
+    links = ["https://en.wikipedia.org/wiki/Yellowknife_Bay,_Mars",
+              "https://en.wikipedia.org/wiki/Darwin_(Martian_crater)",
+              "https://www.jpl.nasa.gov/news/news.php?feature=3936",
+              "https://www.nasa.gov/jpl/msl/pia18075/#.WpeMCOjFKUk",
+              "https://www.nasa.gov/jpl/mro/pia19114",
+              "https://www.nasa.gov/image-feature/jpl/pia20174/marias-pass-contact-zone-of-two-martian-rock-units",
+              "https://mars.nasa.gov/msl/mission/mars-rover-curiosity-mission-updates/?mu=sol-1094-turning-in-to-bridger-basin",
+              "http://redplanet.asu.edu/?tag=gobabeb",
+              "https://www.nasa.gov/image-feature/pia20332/full-circle-vista-from-naukluft-plateau-on-mars",
+              "https://mars.nasa.gov/msl/curiosity-murray-buttes-raw-images/"]
+
+    roverImages= [("1400", 0), ("1400", 1), ("1400", 2), ("1400", 3), ("1400", 4), ("1350", 1), ("620", 1), ("620", 2),
+                  ("1400", 6), ("1400", 5)]
 
     def __init__(self, index):
         self.index = index
@@ -50,12 +75,13 @@ class Quiz:
 class ImageSourcer:
 
     # Constructor initialising attributes
-    def __init__(self, rover, sol, index):
+    def __init__(self, rover, sol, camera, index):
         apiKey = "lORFMg7rox7XMLBWzM1byE9fd5WAe3Cf9KkoQYmp"
         self.rover = rover
         self.sol = sol
+        self.camera = camera
         self.responseString = ("https://api.nasa.gov/mars-photos/api/v1/rovers/" + self.rover + "/photos?sol="
-                              + self.sol + "&api_key=" + apiKey)
+                               + self.sol + "&camera=" + self.camera + "&api_key=" + apiKey)
         self.index = index
 
     def __call__(self):
@@ -93,6 +119,7 @@ class ImageSourcer:
             else:
                 return self.returnURL(data)
 
+
 quizInit = Quiz(0)
 
 #### WEB STUFF ####
@@ -111,8 +138,9 @@ def intro():
 def renderQuestion(valid):
     index = quizInit.index
     nowValid = valid
-    print(nowValid)
-    imgRequest = ImageSourcer("Curiosity", "1350", index)
+    print("IN RENDER QUESTION", valid)
+    (imgSol, imgIndex) = quizInit.roverImages[index]
+    imgRequest = ImageSourcer("Curiosity", imgSol, "navcam", imgIndex)
     x = imgRequest()
     link = imgRequest.receiveImages()
     return render_template('screenload.html', challenge=quizInit.questions[index], optA=quizInit.optionsA[index],
@@ -130,11 +158,13 @@ def gameOver():
 
 @app.route("/correct")
 def correct():
-    return render_template('correct.html')
+    index = quizInit.index
+    return render_template('correct.html', mapLoc=quizInit.locationDesc[index], fact=quizInit.facts[index],
+                           wikiLink=quizInit.links[index])
 
 @app.route("/redirect")
 def redirect():
-    return renderQuestion("true")
+    return renderQuestion("false")
 
 
 @app.route("/submit", methods=['GET', 'POST'])
@@ -144,17 +174,17 @@ def quizManage():
         try:
             result = request.form['options']
             if result == quizInit.getAnswer(quizInit.index):
-                print("CORRECT")
+                print("CORRECT", quizInit.index, result)
                 quizInit.nextQuestion()
                 if quizInit.index == (quizInit.noOfQuestions()):
-                    #print("DONE")
+                    quizInit.index = 0
                     return gameOver()
                 return correct()
             else:
-                print("INCORRECT")
-                return renderQuestion("false")
+                print("INCORRECT", quizInit.index, result)
+                return renderQuestion("true")
         except:
-            return renderQuestion("false")
+            return renderQuestion("true")
 
 
 if __name__ == "__main__":
