@@ -10,7 +10,7 @@
         margin: 0 10vw;
       }
       .padded {
-        padding: 4vh 0;
+        padding: 1vh 0;
       }
     </style>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -43,6 +43,7 @@
   </div>
 
 
+<progress class="progress is-warning" value="{{progressValue}}" max="100">{{progressValue}}%</progress>
 
 
 <section class="hero is-dark is-bold is-small">
@@ -58,7 +59,8 @@
   </div>
 </section>
   <form action="/submit" method="POST">
-      <div class="columns has-text-centered padded is-marginless">
+      <div class="columns has-text-centered padded">
+        <br></br>
         <div class="column is-dark">
           <label class="radio">
             <p>{{optA}}</p>

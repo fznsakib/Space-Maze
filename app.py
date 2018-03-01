@@ -88,12 +88,12 @@ class ImageSourcer:
         return (self.index)
 
     # Write links to images to text file
-    '''def writeToFile(self, data, fileName):
+    def writeToFile(self, data, fileName):
         textFile = open(fileName, "w")
         for entry in data["photos"]:
             print(entry["img_src"])
             textFile.write(entry["img_src"])
-            textFile.write("\n")'''
+            textFile.write("\n")
 
     def returnURL(self, data):
         return data["photos"][self.index]["img_src"]
@@ -135,17 +135,18 @@ def intro():
 
 
 @app.route("/start")
-def renderQuestion(valid):
+def renderQuestion(valid, progress):
     index = quizInit.index
     nowValid = valid
-    print("IN RENDER QUESTION", valid)
+    print("IN RENDER QUESTION", progress)
     (imgSol, imgIndex) = quizInit.roverImages[index]
     imgRequest = ImageSourcer("Curiosity", imgSol, "navcam", imgIndex)
     x = imgRequest()
     link = imgRequest.receiveImages()
     return render_template('screenload.html', challenge=quizInit.questions[index], optA=quizInit.optionsA[index],
                            optB=quizInit.optionsB[index], optC=quizInit.optionsC[index], optD=quizInit.optionsD[index],
-                           qNo=(quizInit.index+1), myLink=link, mapVal=quizInit.locationDesc[index], msgEnable=nowValid)
+                           qNo=(quizInit.index+1), myLink=link, mapVal=quizInit.locationDesc[index], msgEnable=nowValid,
+                           progressValue=progress)
 
 
 @app.route("/help")
@@ -164,17 +165,18 @@ def correct():
 
 @app.route("/redirect")
 def redirect():
-    return renderQuestion("false")
+    return renderQuestion("false", quizInit.index*10)
 
 
 @app.route("/submit", methods=['GET', 'POST'])
 def quizManage():
+    progress = (quizInit.index + 1)*10
     if request.method == 'POST':
 
         try:
             result = request.form['options']
             if result == quizInit.getAnswer(quizInit.index):
-                print("CORRECT", quizInit.index, result)
+                print("CORRECT", progress)
                 quizInit.nextQuestion()
                 if quizInit.index == (quizInit.noOfQuestions()):
                     quizInit.index = 0
@@ -182,9 +184,9 @@ def quizManage():
                 return correct()
             else:
                 print("INCORRECT", quizInit.index, result)
-                return renderQuestion("true")
+                return renderQuestion("true", progress)
         except:
-            return renderQuestion("true")
+            return renderQuestion("true", progress)
 
 
 if __name__ == "__main__":
