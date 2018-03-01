@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request
+import os
+import requests
 
 app = Flask(__name__)
 
+#### QUIZ CLASS ####
 
 class Quiz:
     index = 0
@@ -26,6 +29,9 @@ class Quiz:
     optionsD = ["Moon", "99.8%", "2000 billion (a lot)", "70 trillion years ago", "1 and a half hours", "Uranus",
                 "107ºC", "Venus", "20000mph", "Mars"]
 
+    locationDesc = ["Yellowknife Bay", "Darwin", "Cooperstown", "Kimberley", "Pahrump Hills", "Yellowknife Bay",
+                    "Darwin", "Cooperstown", "Kimberley", "Pahrump Hills"]
+
     def __init__(self, index):
         self.index = index
 
@@ -39,8 +45,57 @@ class Quiz:
         return len(self.answerValue)
 
 
+#### IMAGESOURCER CLASS ####
+
+class ImageSourcer:
+
+    # Constructor initialising attributes
+    def __init__(self, rover, sol, index):
+        apiKey = "lORFMg7rox7XMLBWzM1byE9fd5WAe3Cf9KkoQYmp"
+        self.rover = rover
+        self.sol = sol
+        self.responseString = ("https://api.nasa.gov/mars-photos/api/v1/rovers/" + self.rover + "/photos?sol="
+                              + self.sol + "&api_key=" + apiKey)
+        self.index = index
+
+    def __call__(self):
+        return (self.index)
+
+    # Write links to images to text file
+    '''def writeToFile(self, data, fileName):
+        textFile = open(fileName, "w")
+        for entry in data["photos"]:
+            print(entry["img_src"])
+            textFile.write(entry["img_src"])
+            textFile.write("\n")'''
+
+    def returnURL(self, data):
+        return data["photos"][self.index]["img_src"]
+
+    # Send API request for JSON object
+    def receiveImages(self):
+        response = requests.get(self.responseString)
+
+        # Check to see if request OK
+        if (response.status_code != 200):
+            print ("API Request failed")
+        else:
+            data = response.json()
+
+            # Create file name and store in folder 'images'
+            fileName = self.rover + "-" + self.sol + ".txt"
+            completeFileName = os.path.join("images/", fileName)
+
+            # Remove file if already exists for parameters, to allow new data
+            # to be retrieved
+            if (os.path.isfile(completeFileName)):
+                os.remove(completeFileName)
+            else:
+                return self.returnURL(data)
+
 quizInit = Quiz(0)
 
+#### WEB STUFF ####
 
 @app.route("/")
 def initialise():
@@ -53,51 +108,53 @@ def intro():
 
 
 @app.route("/start")
-def renderQuestion():
+def renderQuestion(valid):
     index = quizInit.index
+    nowValid = valid
+    print(nowValid)
+    imgRequest = ImageSourcer("Curiosity", "1350", index)
+    x = imgRequest()
+    link = imgRequest.receiveImages()
     return render_template('screenload.html', challenge=quizInit.questions[index], optA=quizInit.optionsA[index],
                            optB=quizInit.optionsB[index], optC=quizInit.optionsC[index], optD=quizInit.optionsD[index],
-                           qNo=(quizInit.index+1))
+                           qNo=(quizInit.index+1), myLink=link, mapVal=quizInit.locationDesc[index], msgEnable=nowValid)
 
 
 @app.route("/help")
 def help():
     return render_template('help.html')
 
+@app.route("/gameover")
+def gameOver():
+    return render_template('win.html')
+
+@app.route("/correct")
+def correct():
+    return render_template('correct.html')
+
+@app.route("/redirect")
+def redirect():
+    return renderQuestion("true")
+
 
 @app.route("/submit", methods=['GET', 'POST'])
 def quizManage():
     if request.method == 'POST':
 
-        '''# return result
-        if result == quizInit.getAnswer(quizInit.index):
-            print("CORRECT")
-            print(quizInit.index)
-            quizInit.nextQuestion()
-            if quizInit.index == quizInit.noOfQuestions():
-                print("DONE")
-                return render_template("help.html")
-            return renderQuestion()
-        else:
-            print("INCORRECT")
-            return renderQuestion()
-        # return render_template('help.html')'''
-
         try:
             result = request.form['options']
             if result == quizInit.getAnswer(quizInit.index):
                 print("CORRECT")
-                print(quizInit.index)
                 quizInit.nextQuestion()
-                if quizInit.index == quizInit.noOfQuestions():
-                    print("DONE")
-                    return render_template("help.html")
-                return renderQuestion()
+                if quizInit.index == (quizInit.noOfQuestions()):
+                    #print("DONE")
+                    return gameOver()
+                return correct()
             else:
                 print("INCORRECT")
-                return renderQuestion()
+                return renderQuestion("false")
         except:
-            return renderQuestion()
+            return renderQuestion("false")
 
 
 if __name__ == "__main__":

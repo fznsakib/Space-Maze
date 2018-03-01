@@ -11,24 +11,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css" integrity="sha256-HEtF7HLJZSC3Le1HcsWbz1hDYFPZCqDhZa9QsCgVUdw=" crossorigin="anonymous" />
   <link rel="stylesheet" type="text/css" href="../css/login.css">
 </head>
-<body background="http://getwallpapers.com/wallpaper/full/8/1/4/29917.jpg">
+<body background="../static/background.png">
   <section class="hero is-fullheight">
     <div class="hero-body">
       <div class="container has-text-centered">
         <div class="column is-4 is-offset-4">
-          <h3 class="title has-text-grey">Login</h3>
-          <p class="subtitle has-text-grey">Please login to proceed.</p>
+          <figure class="avatar">
+            <img src="../static/SpaceMaze.png">
+            <br></br>
+          </figure>
           <div class="box">
-            <figure class="avatar">
-              <img src="https://placehold.it/128x128">
-            </figure>
+            <h3 class="title has-text-grey">Login</h3>
+            <p class="subtitle has-text-grey">Please login to proceed.</p>
             <form action="/loggedin">
               <div class="field">
                 <div class="control">
                   <input class="input is-large" type="email" placeholder="Your Email" autofocus="">
                 </div>
               </div>
-
               <div class="field">
                 <div class="control">
                   <input class="input is-large" type="password" placeholder="Your Password">

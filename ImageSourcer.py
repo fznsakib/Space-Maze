@@ -5,21 +5,27 @@ import os
 class ImageSourcer:
 
     # Constructor initialising attributes
-    def __init__(self, rover, sol):
+    def __init__(self, rover, sol, index):
         apiKey = "lORFMg7rox7XMLBWzM1byE9fd5WAe3Cf9KkoQYmp"
         self.rover = rover
         self.sol = sol
         self.responseString = ("https://api.nasa.gov/mars-photos/api/v1/rovers/" + self.rover + "/photos?sol="
                               + self.sol + "&api_key=" + apiKey)
+        self.index = index
 
+    def __call__(self):
+        return (self.index)
 
     # Write links to images to text file
-    def writeToFile(self, data, fileName):
+    '''def writeToFile(self, data, fileName):
         textFile = open(fileName, "w")
         for entry in data["photos"]:
             print(entry["img_src"])
             textFile.write(entry["img_src"])
-            textFile.write("\n")
+            textFile.write("\n")'''
+
+    def returnURL(self, data):
+        return data["photos"][self.index]["img_src"]
 
     # Send API request for JSON object
     def receiveImages(self):
@@ -40,8 +46,9 @@ class ImageSourcer:
             if (os.path.isfile(completeFileName)):
                 os.remove(completeFileName)
             else:
-                self.writeToFile(data, completeFileName)
+                return self.returnURL(data)
 
 
-img1 = ImageSourcer("Curiosity", "500")
-img1.receiveImages()
+#img1 = ImageSourcer("Curiosity", "1000", 0)
+#link = img1.receiveImages()
+#print(link)
