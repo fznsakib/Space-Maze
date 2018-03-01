@@ -1,6 +1,6 @@
 // 1. Import the initial variables
-@import "sass/utilities/initial-variables";
-@import "sass/utilities/functions";
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+@import "../node_modules/bulma/sass/utilities/functions";
 
 // 2. Set your own initial variables
 // Update blue
@@ -40,4 +40,4 @@ $addColors: (
 $colors: map-merge($colors, $addColors);
 
 // 6. Import the rest of Bulma
-@import "bulma";
+@import "../node_modules/bulma";
