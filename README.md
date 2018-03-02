@@ -14,6 +14,8 @@ To allow children to be able to learn about space while being exposed to the env
 * Run app.py to initiate server.
 * Access by visiting "localhost:5000" on preferred web browser
 
+Note: Log in page does not require credentials. Created for future functionality purposes.
+
 ## Technologies Used
 
 * Flask web framework for Python
