@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
+    <title>SpaceMaze</title>
     <link rel="stylesheet" href="../static/mystyles.css">
     <style>
       .spaced {
@@ -25,7 +25,7 @@
     <br></br>
     <nav class="level">
       <p class="level-item has-text-centered">
-        <img src="../static/SpaceMazeV2.png" alt="" style="height: 80px;">
+        <img src="../static/SpaceMazeV2.png" alt="" style="height: 60px;">
       </p>
     </nav>
 
@@ -36,9 +36,11 @@
     </div>
     <div class="column spaced">
       <h1 class="title has-text-centered has-text-white">
-        {{mapVal}}
+        Location: {{mapVal}}
       </h1>
-      <img src="{{ myLink }}" border="3" height="320" width="360" spaced>
+      <figure class="image is-4by3">
+        <img src="{{ myLink }}" border="3" height="320" width="360" spaced>
+      </figure>
     </div>
   </div>
 
@@ -90,5 +92,6 @@
         <input type="submit" class="button is-medium is-warning is-outlined" value="submit" name="anotherinput"/>
       </div>
     </form>
+    <br></b>
   </body>
 </html>

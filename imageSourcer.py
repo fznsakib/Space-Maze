@@ -1,6 +1,4 @@
-import requests
-import json
-import os
+import requests, os
 
 class ImageSourcer:
 
@@ -11,19 +9,19 @@ class ImageSourcer:
         self.sol = sol
         self.camera = camera
         self.responseString = ("https://api.nasa.gov/mars-photos/api/v1/rovers/" + self.rover + "/photos?sol="
-                              + self.sol + "&camera=" + self.camera + "&api_key=" + apiKey)
+                               + self.sol + "&camera=" + self.camera + "&api_key=" + apiKey)
         self.index = index
 
     def __call__(self):
         return (self.index)
 
     # Write links to images to text file
-    '''def writeToFile(self, data, fileName):
+    def writeToFile(self, data, fileName):
         textFile = open(fileName, "w")
         for entry in data["photos"]:
             print(entry["img_src"])
             textFile.write(entry["img_src"])
-            textFile.write("\n")'''
+            textFile.write("\n")
 
     def returnURL(self, data):
         return data["photos"][self.index]["img_src"]
@@ -48,8 +46,3 @@ class ImageSourcer:
                 os.remove(completeFileName)
             else:
                 return self.returnURL(data)
-
-
-#img1 = ImageSourcer("Curiosity", "1000", 0)
-#link = img1.receiveImages()
-#print(link)
